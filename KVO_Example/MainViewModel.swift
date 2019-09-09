@@ -9,13 +9,13 @@
 import Foundation
 
 class MainViewModel: NSObject {
-    @objc dynamic var idVaild = false {
+    var idVaild = false {
         didSet {
             self.vaildButton = self.idVaild && self.passwordVaild
         }
     }
 
-    @objc dynamic var passwordVaild = false {
+    var passwordVaild = false {
         didSet {
             self.vaildButton = self.passwordVaild && self.idVaild
         }
