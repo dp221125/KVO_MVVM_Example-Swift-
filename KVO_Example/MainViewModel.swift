@@ -9,8 +9,18 @@
 import Foundation
 
 class MainViewModel: NSObject {
-    @objc dynamic var idVaild = false
-    @objc dynamic var passwordVaild = false
+    @objc dynamic var idVaild = false {
+        didSet {
+            self.vaildButton = self.idVaild && self.passwordVaild
+        }
+    }
+
+    @objc dynamic var passwordVaild = false {
+        didSet {
+            self.vaildButton = self.passwordVaild && self.idVaild
+        }
+    }
+
     @objc dynamic var vaildButton = false
     var observation = [NSKeyValueObservation]()
 
@@ -38,24 +48,5 @@ class MainViewModel: NSObject {
         } else {
             self.passwordVaild = false
         }
-    }
-
-    override init() {
-        super.init()
-        self.observation.append(self.observe(\.idVaild, options: [.new]) { [weak self] _, change in
-            guard let self = self else { return }
-
-            if let value = change.newValue {
-                self.vaildButton = value && self.passwordVaild
-            }
-        })
-
-        self.observation.append(self.observe(\.passwordVaild, options: [.new]) { [weak self] _, change in
-            guard let self = self else { return }
-
-            if let value = change.newValue {
-                self.vaildButton = value && self.idVaild
-            }
-        })
     }
 }
