@@ -10,7 +10,7 @@ import UIKit
 
 class MainViewController: UIViewController {
     let mainViewModel: MainViewModel
-    var observation = [NSKeyValueObservation]()
+    var observation: NSKeyValueObservation?
 
     @IBOutlet var loginButton: UIButton!
     @IBAction func idTextFieldChanged(_ sender: UITextField) {
@@ -21,12 +21,6 @@ class MainViewController: UIViewController {
         self.mainViewModel.passwordCheck(sender.text)
     }
 
-    @objc func touchTap(sender: UITapGestureRecognizer) {
-        if sender.state == .ended {
-            self.view.endEditing(true)
-        }
-    }
-
     // MARK: - View Cycle
 
     required init?(coder aDecoder: NSCoder) {
@@ -35,15 +29,21 @@ class MainViewController: UIViewController {
     }
 
     override func viewDidLoad() {
-        self.observation.append(self.mainViewModel.observe(\.vaildButton, options: [.new]) { [weak self] _, change in
+        self.observation = self.mainViewModel.observe(\.vaildButton, options: [.new]) { [weak self] _, change in
             guard let self = self else { return }
 
             if let value = change.newValue {
                 print(value)
                 self.loginButton.isEnabled = value
             }
-        })
+        }
 
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.touchTap)))
+    }
+
+    @objc func touchTap(sender: UITapGestureRecognizer) {
+        if sender.state == .ended {
+            self.view.endEditing(true)
+        }
     }
 }

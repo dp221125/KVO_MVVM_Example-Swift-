@@ -22,7 +22,6 @@ class MainViewModel: NSObject {
     }
 
     @objc dynamic var vaildButton = false
-    var observation = [NSKeyValueObservation]()
 
     func idCheck(_ id: String?) {
         guard let _ = id else {
